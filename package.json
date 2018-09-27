@@ -1,0 +1,19 @@
+{
+  "name": "tfg",
+  "version": "1.0.0",
+  "description": "Application for turning management between nurses in Hospital General de Albacete",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baez97/TFG.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/baez97/TFG/issues"
+  },
+  "homepage": "https://github.com/baez97/TFG#readme"
+}
