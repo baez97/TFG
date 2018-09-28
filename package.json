@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/baez97/TFG/issues"
   },
-  "homepage": "https://github.com/baez97/TFG#readme"
+  "homepage": "https://github.com/baez97/TFG#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "jasmine-node": "^1.16.2"
+  },
+  "devDependencies": {}
 }

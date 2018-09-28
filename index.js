@@ -5,6 +5,6 @@ var port=config.port;
 var exp=require("express");
 var app=exp(); //el tutorial indicaba exp.createServer()
 
-var model = require("server/model.js");
+var model = require("./server/model.js");
 
-var game = new Game();
+console.log("Hello friend");
