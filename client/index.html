@@ -2,10 +2,34 @@
 <html>
     <head>
         <title>Title of the application</title>
+        <script src="node-calendar.js"></script>
+        <script src="./src/model.js"></script>
     </head>
     <body>
-        <script> 
+        <script>
+            var service = new Service([nurse_1, nurse_2]);
+            
+            var turn_1     = new Turn("03/06/2018", "M");
+            var turn_2     = new Turn("04/06/2018", "T");
+            
+            var schedule_1 = new Schedule([turn_1]);
+            var schedule_2 = new Schedule([turn_2]);
+            
+            var nurse_1    = new Nurse(1, "Ana",   schedule_1, service);
+            var nurse_2    = new Nurse(2, "Marce", schedule_2, service);
+            service.nurses = [nurse_1, nurse_2]; 
+            
+            var purposal = new Purposal(nurse_1, turn_2);
         </script>
-        <p>Hello friend, that's lame</p>
+        <table style="border: 1px solid black">
+            <tr >
+                <th>Lunes</th>
+                <th>Martes</th>
+            </tr>
+            <tr>
+                <td id="#primero">M</td>
+                <td id="#segundo">T</td>
+            </tr>
+        </table>
     </body>
 </html>

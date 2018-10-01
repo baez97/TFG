@@ -8,17 +8,18 @@ describe("Nurses Test", function() {
     var purposal;
   
     beforeEach(function() {
+        service = new model.Service([nurse_1, nurse_2]);
+
         turn_1     = new model.Turn("03/06/2018", "M");
-        schedule_1 = new model.Schedule([turn_1]);
-        nurse_1    = new model.Nurse(1, "Ana", 1);
-
         turn_2     = new model.Turn("04/06/2018", "T");
+
+        schedule_1 = new model.Schedule([turn_1]);
         schedule_2 = new model.Schedule([turn_2]);
-        nurse_2    = new model.Nurse(2, "Marce", 2);
 
-        purposal = new model.Purposal(nurse_1, turn_2);
+        nurse_1    = new model.Nurse(1, "Ana",   schedule_1, service);
+        nurse_2    = new model.Nurse(2, "Marce", schedule_2, service);
 
-        //service = new model.Service([nurse_1, nurse_2]);
+        purposal   = new model.Purposal(nurse_1, turn_2);
     });
 
     it("Nurses have name and schedule defined", function() {
@@ -68,27 +69,36 @@ describe("Nurses Test", function() {
 
     it("Purposals have nurse, date and value, and returns them correctly", function() {
         var purposal = new model.Purposal(nurse_1, turn_2);
+
         expect( purposal.getNurse() ).toEqual(nurse_1);
         expect( purposal.getDate()  ).toEqual("04/06/2018");
         expect( purposal.getValue() ).toEqual("T");
     });
 
-    it("Changes have a nurse, turn and purposals, and can manipulate the purposals collection", function() {
-        var change = new model.Change(nurse_1, turn_1);
-        change.addPurposal(purposal);
-        expect( change.getPurposals().length ).toEqual(1);
-        change.denyPurposal(purposal);
-        expect( change.getPurposals().length ).toEqual(0);
-    });
-
     it("Nurses are notified about changes", function () {
         var change = new model.Change(nurse_2, turn_1);
         console.log = jasmine.createSpy("log");
+
         change.addPurposal(purposal);
-        expect(console.log).toHaveBeenCalledWith("Marce! Ana can change your turn by 04/06/2018 (T)");
+        expect( console.log ).toHaveBeenCalledWith("Marce! Ana can change your turn by 04/06/2018 (T)");
+
         change.denyPurposal(purposal);
-        expect(console.log).toHaveBeenCalledWith("Ana! Sorry but Marce didn't accepted your purposal");
+        expect( console.log ).toHaveBeenCalledWith("Ana! Sorry but Marce didn't accepted your purposal");
+
         change.addPurposal(purposal);
+    });
+
+    it("Service has nurses, changes and history defined", function() {
+        expect( service.nurses        ).toBeDefined();
+        expect( service.history       ).toBeDefined();
+        expect( service.changes       ).toBeDefined();
+        expect( service.nurses.length ).toEqual(2);
+    });
+
+    it("A nurse can ask for change their shifts, and the rest are notified", function() {
+        var turn = nurse_1.getTurn("03/06/2018");
+        nurse_1.askForChange(turn);
+        expect( console.log ).toHaveBeenCalledWith("Marce! Ana wants to change 03/06/2018 (M)")
     });
 });
   

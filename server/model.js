@@ -1,16 +1,9 @@
-const readline = require('readline');
-
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-
-function Nurse(id, name, schedule /*,service*/) {
+function Nurse(id, name, schedule ,service) {
     this.id = id;
     this.name = name;
     this.schedule = schedule;
-    //this.service = service;
+    this.service = service;
+    var self = this;
 
     this.sayHello = function() {
         console.log("Hi! I am " + this.name);
@@ -24,6 +17,10 @@ function Nurse(id, name, schedule /*,service*/) {
         this.schedule.setTurn(date, value);
     }
 
+    this.getTurn = function(date) {
+        return this.schedule.getTurn(date);
+    }
+
     this.notifyPurposal = function(purposal) {
         console.log(this.name+"! "+purposal.getNurse().getName() + 
                     " can change your turn by " + purposal.getDate() + 
@@ -34,22 +31,18 @@ function Nurse(id, name, schedule /*,service*/) {
         console.log(this.name+"! Sorry but "+name+ " didn't accepted your purposal");
     }
 
-    // this.askForChange = function(date, value) {
-    //     this.service.askForChange(this, date, value);
-    // }
+    this.notifyAccept = function(turn) {
+        console.log(this.name+"! Your purposal has been confirmed");
+    }
 
-    // this.notify = function(change) {
-    //     console.log("Hey! "+change.nurse+" wants to change day "+change.date+"("+change.value+")");
-    //     rl.question('Accept? ', (answer) => {
-    //         if (answer == 'Y' ){
-    //             console.log("Change accepted");
-    //         } else {
-    //             console.log("Change rejected");
-    //         }
-    //         rl.close();
-    //     });
+    this.notify = function(change) {
+        console.log(self.name+"! "+change.getName()+" wants to change " + change.getDate() +
+                    " (" + change.getValue() + ")");
+    }
 
-    // }
+    this.askForChange = function(turn) {
+        this.service.askForChange(this, turn);
+    }
 };
 
 function Schedule(turns) {
@@ -60,7 +53,7 @@ function Schedule(turns) {
     };
 
     this.getTurn = function(date) {
-        return this.turns.find(function(turn) { 
+        return this.turns.find(function(turn) {
             return turn.date == date 
         });
     }
@@ -95,37 +88,49 @@ function Turn(date, value) {
     };
 };
 
-// function Service(nurses) {
-//     this.nurses = nurses;
-//     this.changes = [];
-//     this.history = [];
+function Service(nurses) {
+    this.nurses = nurses;
+    this.changes = [];
+    this.history = [];
     
-//     this.askForChange = function(nurse, date, value) {
-//         var change = new Change(nurse, date, value);
-//         this.changes.push(change);
-//         this.nurses.forEach(e => {
-//             if ( e.id != nurse.id ) {
-//                 notify(change);
-//             }
-//         });
-//     }
+    this.askForChange = function(nurse, turn) {
+        var change = new Change(nurse, turn);
+        this.changes.push(change);
+        this.nurses.forEach(e => {
+            if ( e.id != nurse.id ) {
+                e.notify(change);
+            }
+        });
+    }
 
-//     this.purposeChange = function(change, nurse, date, value) {
-//         var purposal = new Purposal(nurse, date, value);
-//         change.addPurposal(purposal);
-//     }
+    // this.purposeChange = function(change, nurse, date, value) {
+    //     var purposal = new Purposal(nurse, date, value);
+    //     change.addPurposal(purposal);
+    // }
 
-//     this.notifyChange = function(change, purposal) {
-//         //this.changes.delete(change);
-//         this.history.add({change: change, purposal: purposal});
-//     }
-// }
+    // this.notifyChange = function(change, purposal) {
+    //     //this.changes.delete(change);
+    //     this.history.add({change: change, purposal: purposal});
+    // }
+}
 
-function Change(nurse, date, value) {
+function Change(nurse, turn) {
     this.nurse = nurse;
-    this.date = date;
-    this.value = value;
+    this.turn = turn
     this.purposals = [];
+
+    this.getName = function() {
+        return this.nurse.getName();
+    }
+
+    this.getValue = function() {
+        return this.turn.getValue();
+    }
+
+    this.getDate = function() {
+        return this.turn.getDate();
+    }
+
 
     this.addPurposal = function(purposal) {
         this.nurse.notifyPurposal(purposal);
@@ -142,7 +147,7 @@ function Change(nurse, date, value) {
 
     this.confirmPurposal = function(purposal) {
         // this.service.notifyChange(this, purposal);
-        purposal.notifyAccept(this.date, this.value);
+        purposal.notifyAccept(turn);
         this.nurse.setTurn(this.date, purposal.getValue());
     }
 
@@ -174,10 +179,14 @@ function Purposal(nurse, turn) {
     this.notifyDeny = function(name) {
         this.nurse.notifyDeny(name);
     };
+
+    this.notifyAccept = function(turn) {
+        this.nurse.notifyAccept(turn);
+    }
 }
 module.exports.Nurse = Nurse;
 module.exports.Schedule = Schedule;
 module.exports.Turn = Turn;
 module.exports.Purposal = Purposal;
-// module.exports.Service = Service;
+module.exports.Service = Service;
 module.exports.Change = Change;

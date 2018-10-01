@@ -4,13 +4,13 @@
   "description": "Application for turning management between nurses in Hospital General de Albacete",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./run-test.sh"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/baez97/TFG.git"
   },
-  "author": "",
+  "author": "José Manuel Báez Soriano",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/baez97/TFG/issues"
@@ -18,7 +18,8 @@
   "homepage": "https://github.com/baez97/TFG#readme",
   "dependencies": {
     "express": "^4.16.3",
-    "jasmine-node": "^1.16.2"
+    "jasmine-node": "^2.0.1",
+    "node-calendar": "^0.1.5"
   },
   "devDependencies": {}
 }
