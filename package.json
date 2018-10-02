@@ -4,7 +4,7 @@
   "description": "Application for turning management between nurses in Hospital General de Albacete",
   "main": "index.js",
   "scripts": {
-    "test": "./run-test.sh"
+    "test": "./node_modules/.bin/jasmine-node ./server"
   },
   "repository": {
     "type": "git",
