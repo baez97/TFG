@@ -97,13 +97,17 @@ describe("Nurses Test", function() {
         expect( console.log ).toHaveBeenCalledWith("Marce! Ana wants to change 03/06/2018 (M)")
     });
 
-    it("Calendar is properly generated", function() {
-        var calendarGenerator = new CalendarGenerator();
-        var calendar = calendarGenerator.getCalendarByYear(2018);
+});
 
+describe("Calendar Test", function() {
+    
+    var calendarGenerator = new CalendarGenerator();
+    var calendar = calendarGenerator.getCalendarByYear(2018);
+    
+    it("Calendar is properly generated", function() {
         var first_weekday_2018 = [1, 4, 4, 7, 2, 5, 7, 3, 6, 1, 4, 6];
         var last_weekday_2018  = [3, 3, 6, 1, 4, 6, 2, 5, 7, 3, 5, 1];
-
+    
         for ( i = 0; i < 12; i++ ) {
             var last = calendar[i].length - 1;
             expect ( calendar[i][0].weekday    ).toEqual(first_weekday_2018[i]);
@@ -111,4 +115,3 @@ describe("Nurses Test", function() {
         }
     });
 });
-  
