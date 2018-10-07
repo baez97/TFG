@@ -38,7 +38,7 @@ var CalendarGenerator = function() {
         var week = []
         var month = calendar[parseInt(m)-1];
         var dayObj = month[parseInt(d)-1];
-        var monday = new Date(parseInt(y), parseInt(m), parseInt(d));
+        var monday = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
         monday.setDate(dayObj.day - dayObj.weekday + 1);
 
         for ( i = 0; i < 7; i++ ) {
