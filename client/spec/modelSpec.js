@@ -101,8 +101,16 @@ describe("Nurses Test", function() {
 
 describe("Calendar Test", function() {
     
-    var calendarGenerator = new CalendarGenerator();
-    var calendar = calendarGenerator.getCalendarByYear(2018);
+    var calendarGenerator;
+    var calendar;
+    var exp; 
+    var week;
+
+    beforeEach(function() {
+        calendarGenerator = new CalendarGenerator();
+        calendar = calendarGenerator.getCalendarByYear(2018);
+        exp = [[28, 29, 30, 31, 1, 2, 3], [31, 1, 2, 3, 4, 5, 6], [26, 27, 28, 29, 30, 31, 1]];
+    });
     
     it("Calendar is properly generated", function() {
         var first_weekday_2018 = [1, 4, 4, 7, 2, 5, 7, 3, 6, 1, 4, 6];
@@ -114,4 +122,27 @@ describe("Calendar Test", function() {
             expect ( calendar[i][last].weekday ).toEqual(last_weekday_2018[i]);
         }
     });
+
+    it("Calendar can get the week of an specific day", function(){
+        week = calendarGenerator.getWeek("3/6/2018", calendar);
+        for ( i = 0; i < 7; i++ ) {
+            expect ( week[i].day ).toEqual(exp[0][i]);
+        }
+    });
+    
+    it("Calendar returns days of the next year if necessary when getting a week", function() {
+        week = calendarGenerator.getWeek("31/12/2018", calendar);
+        for ( i = 0; i < 7; i++ ) {
+            expect ( week[i].day ).toEqual(exp[1][i]);
+        }
+    });
+
+    it("Calendar returns days of the previous year if necessary when getting a week", function() {
+        calendar = calendarGenerator.getCalendarByYear(2017);
+        week = calendarGenerator.getWeek("1/1/2017", calendar);
+        for ( i = 0; i < 7; i++ ) {
+            expect ( week[i].day ).toEqual(exp[2][i]);
+        }
+    });
+
 });
